@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "Vyacheslav Atkin", email = "avea22r225@student.bmstu.ru"},
 ]
-dependencies = []
+dependencies = ["pydantic>=2.10.1", "fastapi>=0.115.5", "dependency-injector>=4.43.0", "requests>=2.32.3", "sqlmodel>=0.0.22", "python-keycloak>=4.7.2"]
 requires-python = "==3.10.*"
 readme = "README.md"
 license = {text = "MIT"}
