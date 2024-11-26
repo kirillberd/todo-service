@@ -14,6 +14,7 @@ class TaskRepository:
             if session is None:
                 raise Exception("Could not connect to a database")
             else:
+                print(task)
                 session.add(task)
 
          

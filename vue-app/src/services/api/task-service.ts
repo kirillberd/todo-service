@@ -18,7 +18,7 @@ export class TaskService {
 
   async createTask(task: Task): Promise<Task> {
     try {
-      const { data } = await axios.post<Task>(this.baseUrl, task);
+      const { data } = await axios.post<Task>(this.baseUrl + '/add', task);
       return data;
     } catch (error) {
       throw error;

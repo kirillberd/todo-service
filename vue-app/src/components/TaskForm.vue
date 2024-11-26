@@ -12,12 +12,10 @@ export default defineComponent({
   
   setup(_, { emit }) {
     const initialTask: Task = {
-      id: null,
       user_id: '',
       name: '',
-      tags: new Set<string>(),
+      tags: [],
       comments: null,
-      created_at: null,
       state: 'new',
       deadline: null,
     };
@@ -40,15 +38,29 @@ export default defineComponent({
     const addTag = () => {
       if (newTag.value.trim()) {
         if (!task.value.tags) {
-          task.value.tags = new Set<string>();
+          task.value.tags = [];
         }
-        task.value.tags.add(newTag.value.trim());
+        if (!task.value.tags.includes(newTag.value.trim())) {
+          task.value.tags.push(newTag.value.trim());
+        }
         newTag.value = '';
       }
     };
 
-    const removeTag = (tag: string) => {
-      task.value.tags?.delete(tag);
+    const removeTag = (tagToRemove: string) => {
+      if (task.value.tags) {
+        task.value.tags = task.value.tags.filter(tag => tag !== tagToRemove);
+        if (task.value.tags.length === 0) {
+          task.value.tags = null;
+        }
+      }
+    };
+
+    const handleTagKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addTag();
+      }
     };
 
     const handleSubmit = async () => {
@@ -58,7 +70,6 @@ export default defineComponent({
           
           const submittedTask = {
             ...task.value,
-            created_at: new Date().toISOString()
           };
           
           emit('save-task', submittedTask);
@@ -86,128 +97,124 @@ export default defineComponent({
       addTag,
       removeTag,
       handleSubmit,
-      handleCancel
+      handleCancel,
+      handleTagKeydown
     };
   }
 });
 </script>
 
 <template>
-    <div class="task-form-card" @click.stop>
-      <div class="task-form-card__header">
-        <h2>Создание задачи</h2>
-        <button 
-          class="close-button"
-          @click="handleCancel"
-          :disabled="isLoading"
-        >
-          ×
-        </button>
-      </div>
-      
-      <div class="task-form-card__content">
-        <form @submit.prevent="handleSubmit" class="task-form">
-          <!-- Название задачи -->
-          <div class="form-group">
-            <label>Название задачи*</label>
+  <div class="task-form-card" @click.stop>
+    <div class="task-form-card__header">
+      <h2>Создание задачи</h2>
+      <button 
+        class="close-button"
+        @click="handleCancel"
+        :disabled="isLoading"
+      >
+        ×
+      </button>
+    </div>
+    
+    <div class="task-form-card__content">
+      <form @submit.prevent="handleSubmit" class="task-form">
+        <div class="form-group">
+          <label>Название задачи*</label>
+          <input
+            v-model="task.name"
+            type="text"
+            class="input-field"
+            :class="{ 'input-field--error': errors.name }"
+            :disabled="isLoading"
+            placeholder="Введите название задачи"
+          />
+          <span v-if="errors.name" class="error-message">
+            {{ errors.name }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Дедлайн</label>
+          <input
+            v-model="task.deadline"
+            type="datetime-local"
+            class="input-field"
+            :disabled="isLoading"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Теги</label>
+          <div class="tags-input">
             <input
-              v-model="task.name"
+              v-model="newTag"
               type="text"
               class="input-field"
-              :class="{ 'input-field--error': errors.name }"
-              :disabled="isLoading"
-              placeholder="Введите название задачи"
-            />
-            <span v-if="errors.name" class="error-message">
-              {{ errors.name }}
-            </span>
-          </div>
-  
-          <!-- Дедлайн -->
-          <div class="form-group">
-            <label>Дедлайн</label>
-            <input
-              v-model="task.deadline"
-              type="datetime-local"
-              class="input-field"
+              placeholder="Введите тег и нажмите Enter"
+              @keydown="handleTagKeydown"
               :disabled="isLoading"
             />
-          </div>
-  
-          <!-- Теги -->
-          <div class="form-group">
-            <label>Теги</label>
-            <div class="tags-input">
-              <input
-                v-model="newTag"
-                type="text"
-                class="input-field"
-                placeholder="Введите тег"
-                @keyup.enter.prevent="addTag"
-                :disabled="isLoading"
-              />
-              <button
-                type="button"
-                class="button button--secondary tag-button"
-                @click="addTag"
-                :disabled="isLoading || !newTag.trim()"
-              >
-                +
-              </button>
-            </div>
-            <div class="tags-container">
-              <span
-                v-for="tag in task.tags"
-                :key="tag"
-                class="tag"
-              >
-                {{ tag }}
-                <button
-                  type="button"
-                  class="tag-remove"
-                  @click="removeTag(tag)"
-                  :disabled="isLoading"
-                >
-                  ×
-                </button>
-              </span>
-            </div>
-          </div>
-  
-          <!-- Комментарии -->
-          <div class="form-group">
-            <label>Комментарии</label>
-            <textarea
-              v-model="task.comments"
-              rows="3"
-              class="input-field"
-              :disabled="isLoading"
-              placeholder="Добавьте комментарии к задаче"
-            ></textarea>
-          </div>
-  
-          <!-- Кнопки действий -->
-          <div class="form-actions">
             <button
               type="button"
-              class="button button--secondary"
-              @click="handleCancel"
-              :disabled="isLoading"
+              class="button button--secondary tag-button"
+              @click="addTag"
+              :disabled="isLoading || !newTag.trim()"
             >
-              Отмена
-            </button>
-            <button
-              type="submit"
-              class="button button--primary"
-              :disabled="isLoading"
-            >
-              {{ isLoading ? 'Сохранение...' : 'Создать задачу' }}
+              +
             </button>
           </div>
-        </form>
-      </div>
+          <div class="tags-container">
+            <span
+              v-for="tag in task.tags"
+              :key="tag"
+              class="tag"
+            >
+              {{ tag }}
+              <button
+                type="button"
+                class="tag-remove"
+                @click="removeTag(tag)"
+                :disabled="isLoading"
+              >
+                ×
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Комментарии</label>
+          <textarea
+            v-model="task.comments"
+            rows="3"
+            class="input-field"
+            :disabled="isLoading"
+            placeholder="Добавьте комментарии к задаче"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="button button--secondary"
+            @click="handleCancel"
+            :disabled="isLoading"
+          >
+            Отмена
+          </button>
+          <button
+            type="submit"
+            class="button button--primary"
+            :disabled="isLoading"
+          >
+            {{ isLoading ? 'Сохранение...' : 'Создать задачу' }}
+          </button>
+        </div>
+      </form>
     </div>
-  </template>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @import '../assets/components/task-form.scss';

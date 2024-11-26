@@ -1,13 +1,14 @@
-from sqlmodel import Field, SQLModel
-from typing import Optional
+from sqlmodel import Field, SQLModel, Column, Integer, String
+from sqlalchemy.dialects import postgresql
+from typing import Optional, List
 from datetime import datetime
 
-class Task(SQLModel):
+class Task(SQLModel, table=True):
     __tablename__ = "task"
     id: Optional[int] = Field(nullable=False, primary_key=True)
     user_id: str = Field(nullable=False)
     name: str = Field(nullable=False)
-    tags: Optional[set[str]] = Field(nullable=True)
+    tags: Optional[List[str]] = Field(default=[], sa_column=Column(postgresql.ARRAY(String())))
     comments: Optional[str] = Field(nullable=True)
     created_at: datetime = Field(default=datetime.now())
     state: str = Field(nullable=False)

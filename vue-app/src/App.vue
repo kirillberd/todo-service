@@ -31,7 +31,6 @@ export default defineComponent({
 <template>
   <div>
     <TaskPage @save-task="handleSaveTask" />
-    <!-- Остальной контент -->
   </div>
 </template>
 <style lang="scss">
