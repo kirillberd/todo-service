@@ -23,3 +23,6 @@ class Container(containers.DeclarativeContainer):
     task_repository: TaskRepository = providers.Singleton(
         TaskRepository, engine=sql_engine
     )
+    task_service: TaskService = providers.Singleton(
+        TaskService, task_repository=task_repository
+    )
