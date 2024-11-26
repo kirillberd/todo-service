@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import TaskPage from './components/TaskPage.vue';
+import TaskPage from './components/TaskList.vue';
 import type { Task } from './models/task';
 
 export default defineComponent({
@@ -34,3 +34,12 @@ export default defineComponent({
     <!-- Остальной контент -->
   </div>
 </template>
+<style lang="scss">
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(26, 28, 32, 0.95) 0%, 
+    rgba(44, 47, 51, 0.95) 100%
+  );
+}
+</style>

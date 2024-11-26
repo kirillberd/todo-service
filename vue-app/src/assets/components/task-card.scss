@@ -1,0 +1,62 @@
+.task-card {
+    background-color: var(--bg-secondary);
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  
+    &__header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+      h2 {
+        margin: 0;
+        color: var(--text-primary);
+      }
+    }
+  
+    &__body {
+      padding: 1.5rem;
+    }
+  
+    &__footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+    }
+  
+    .info-group {
+      margin-bottom: 1.5rem;
+  
+      label {
+        display: block;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+  
+    .close-button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      
+      &:hover {
+        color: var(--text-primary);
+      }
+    }
+  
+    .comments {
+      background-color: var(--bg-primary);
+      padding: 1rem;
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+  }

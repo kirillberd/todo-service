@@ -1,5 +1,5 @@
 export interface Task {
-    id: number | null;
+    id: number;
     user_id: string;
     name: string;
     tags: Set<string> | null;
