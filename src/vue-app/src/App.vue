@@ -1,44 +1,34 @@
+<template>
+  <div id="app">
+    <Navbar />
+    <RouterView />
+  </div>
+</template>
+
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import TaskPage from './components/TaskList.vue';
-import type { Task } from './models/task';
+import { defineComponent, ref } from "vue";
+
+import Navbar from "./components/Navbar.vue";
 
 export default defineComponent({
-  name: 'App',
-  
+  name: "App",
   components: {
-    TaskPage
-  },
-  
-  setup() {
-    const tasks = ref<Task[]>([]);
 
-    const handleSaveTask = (task: Task) => {
-      if (task.id === null) {
-        task.id = Date.now();
-      }
-      tasks.value.push(task);
+    Navbar,
+  },
+  setup() {
+    const reload = ref(false);
+
+    const refreshTable = () => {
+      reload.value = !reload.value;
     };
 
     return {
-      tasks,
-      handleSaveTask
+      reload,
+      refreshTable,
     };
-  }
+  },
 });
 </script>
 
-<template>
-  <div>
-    <TaskPage @save-task="handleSaveTask" />
-  </div>
-</template>
-<style lang="scss">
-.app {
-  min-height: 100vh;
-  background: linear-gradient(135deg, 
-    rgba(26, 28, 32, 0.95) 0%, 
-    rgba(44, 47, 51, 0.95) 100%
-  );
-}
-</style>
+<style src="src/assets/styles.scss"></style>
