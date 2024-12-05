@@ -75,53 +75,52 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
 import { useUserStore } from '../store/userStore';
-
-interface TaskData {
-  name: string;
-  tags: string[];
-  state: string;
-  comments: string;
-  deadline: string;
-}
+import { taskService, type TaskDTO } from '../services/taskService';
 
 export default defineComponent({
   name: 'TaskForm',
-  emits: ['submit', 'cancel'],
-  setup(_, { emit }) {
+  setup() {
     const userStore = useUserStore();
     const tagInput = ref('');
+    const error = ref('');
 
-    const taskData = reactive<TaskData>({
+    const taskData = reactive<TaskDTO>({
       name: '',
       tags: [],
       state: 'new',
       comments: '',
-      deadline: ''
+      deadline: null,
+      user_id: userStore.user?.id || ''
     });
 
     const addTag = () => {
       if (tagInput.value.trim()) {
+        if (!taskData.tags) {
+          taskData.tags = [];
+        }
         taskData.tags.push(tagInput.value.trim());
         tagInput.value = '';
       }
     };
 
     const removeTag = (index: number) => {
-      taskData.tags.splice(index, 1);
+      if (taskData.tags) {
+        taskData.tags.splice(index, 1);
+      }
     };
 
-    const handleSubmit = () => {
-      const submitData = {
-        ...taskData,
-        user_id: userStore.user?.id,
-        created_at: new Date(),
-        deadline: taskData.deadline ? new Date(taskData.deadline) : null
-      };
+    const handleSubmit = async () => {
+      try {
+        await taskService.createTask(taskData);
+      } catch (err: any) {
+        error.value = err.message;
+      }
     };
 
     return {
       taskData,
       tagInput,
+      error,
       addTag,
       removeTag,
       handleSubmit
