@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from infrastructure.container import Container
 from infrastructure.api.controllers import task_controller
-
+from infrastructure.api.controllers import auth_contoller
 
 def load_continaer_config(container: Container):
     container.config.postgres_user.from_env("POSTGRES_USER")
@@ -16,6 +16,7 @@ def setup(app: FastAPI, container: Container):
     load_continaer_config(container=container)
     container.wire(modules=[task_controller])
     app.include_router(task_controller.router)
+    app.include_router(auth_contoller.router)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
