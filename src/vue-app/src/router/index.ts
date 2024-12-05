@@ -3,6 +3,7 @@ import { useUserStore } from "../store/userStore";
 import Login from "../components/Login.vue";
 import Register from "../components/Register.vue";
 import TaskForm from '../components/TaskForm.vue'
+import TaskPage from "../components/TaskPage.vue";
 const routes = [
   {
 
@@ -17,8 +18,8 @@ const routes = [
   },
   {
     path: '/',
-    name: 'task-from',
-    component: TaskForm,
+    name: 'task-page',
+    component: TaskPage,
     meta: { requiresAuth: true } // добавляем мета-поле для проверки аутентификации
   }
 
