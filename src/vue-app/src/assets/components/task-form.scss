@@ -1,121 +1,83 @@
-:root {
-  --form-bg: #1e1e2e;
-  --input-bg: #181825;
-  --accent-purple: #9d7cd8;
-  --accent-purple-hover: #8d6fcc;
-  --border-subtle: rgba(157, 124, 216, 0.1);
-  --text-bright: #cdd6f4;
-  --text-muted: #a6adc8;
+
+.task-form-container {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
 }
-.task-form-card {
-  background: var(--form-bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  width: 460px;
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 
-  &__header {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border-subtle);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-
-    h2 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 500;
-      color: var(--text-bright);
-      letter-spacing: 0.3px;
-    }
-  }
-
-  &__content {
-    padding: 1.5rem;
-    overflow-y: auto;
-    max-height: calc(90vh - 60px); // 60px - примерная высота заголовка
-  }
+.form-title {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
 }
 
 .task-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  gap: 1.5rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  width: 100%;
 
   label {
-    color: var(--text-bright);
+    color: var(--text-primary);
     font-size: 0.875rem;
     font-weight: 500;
-    letter-spacing: 0.3px;
   }
 }
 
-.input-field {
-  width: 100%;
-  background: var(--input-bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  padding: 0.75rem;
-  color: var(--text-bright);
+.form-input,
+.form-select,
+.form-textarea {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
   font-size: 0.875rem;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-
-  &::placeholder {
-    color: var(--text-muted);
-  }
-
-  &:hover {
-    border-color: var(--accent-purple);
-    border-color: rgba(157, 124, 216, 0.3);
-  }
+  padding: 0.75rem 1rem;
+  width: 100%;
+  transition: border-color 0.2s ease;
 
   &:focus {
+    border-color: var(--accent-primary);
     outline: none;
-    border-color: var(--accent-purple);
-    box-shadow: 0 0 0 2px rgba(157, 124, 216, 0.2);
   }
 
-  &--error {
-    border-color: var(--error-color);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  &::placeholder {
+    color: var(--text-secondary);
   }
 }
 
-.tags-input {
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.tags-input-container {
   display: flex;
   gap: 0.5rem;
-  width: 100%;
+}
 
-  .input-field {
-    flex: 1;
-  }
+.add-tag-btn {
+  background-color: var(--accent-primary);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0 1rem;
+  transition: background-color 0.2s ease;
 
-  .tag-button {
-    padding: 0.5rem;
-    min-width: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &:hover {
+    background-color: var(--accent-hover);
   }
 }
 
@@ -123,257 +85,83 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  min-height: 32px;
-  padding: 0.25rem 0;
-  width: 100%;
+  margin-top: 0.5rem;
 }
 
 .tag {
-  background: rgba(157, 124, 216, 0.1);
-  border: 1px solid rgba(157, 124, 216, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: 16px;
-  font-size: 0.875rem;
-  color: var(--text-bright);
+  background-color: var(--tag-bg);
+  border-radius: 999px;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  transition: all 0.2s ease;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
 
-  &:hover {
-    background: rgba(157, 124, 216, 0.15);
-  }
-
-  .tag-remove {
+  .remove-tag {
     background: none;
     border: none;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     cursor: pointer;
-    padding: 0 0.25rem;
-    font-size: 1rem;
-    line-height: 1;
-    transition: all 0.2s ease;
+    font-size: 1.25rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
 
-    &:hover:not(:disabled) {
-      color: var(--text-bright);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    &:hover {
+      color: var(--error-color);
     }
   }
-}
-
-textarea.input-field {
-  min-height: 80px;
-  max-height: 150px;
-  resize: vertical;
-  line-height: 1.5;
-  font-family: inherit;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 1rem;
   margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-subtle);
 }
 
-.button {
-  padding: 0.625rem 1.25rem;
-  border-radius: 6px;
+.btn-submit,
+.btn-cancel {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid transparent;
-  cursor: pointer;
+  padding: 0.75rem 1.5rem;
   transition: all 0.2s ease;
-
-  &--primary {
-    background: var(--accent-purple);
-    color: white;
-
-    &:hover:not(:disabled) {
-      background: var(--accent-purple-hover);
-    }
-  }
-
-  &--secondary {
-    background: rgba(157, 124, 216, 0.1);
-    border-color: rgba(157, 124, 216, 0.2);
-    color: var(--text-bright);
-
-    &:hover:not(:disabled) {
-      background: rgba(157, 124, 216, 0.15);
-      border-color: rgba(157, 124, 216, 0.3);
-    }
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
 }
 
-.close-button {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1.25rem;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-
-  &:hover:not(:disabled) {
-    color: var(--text-bright);
-    background: rgba(157, 124, 216, 0.1);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-// Стили для datetime-local
-input[type="datetime-local"] {
-  color-scheme: dark;
-  padding-right: 0.5rem;
-
-  &::-webkit-calendar-picker-indicator {
-    filter: invert(0.8);
-    opacity: 0.6;
-    cursor: pointer;
-    margin-left: 0.5rem;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-}
-
-.error-message {
-  color: #f38ba8;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-
-  &::before {
-    content: "!";
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #f38ba8;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-  }
-}
-
-:root {
-  --form-bg: #2b2440; // Более темный фиолетовый фон
-  --input-bg: #1e1b2c; // Темный фон для инпутов
-  --accent-purple: #b195f6; // Более яркий и насыщенный фиолетовый
-  --accent-purple-hover: #c5aeff;
-  --border-subtle: rgba(
-    177,
-    149,
-    246,
-    0.2
-  ); // Более заметная фиолетовая граница
-  --text-bright: #ffffff; // Чисто белый для лучшей контрастности
-  --text-muted: #bdb7d3; // Светло-фиолетовый для неактивного текста
-  --shadow-color: rgba(98, 63, 198, 0.4); // Фиолетовая тень
-}
-
-.task-form-card {
-  background: var(--form-bg);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 4px 24px var(--shadow-color); // Добавляем фиолетовое свечение
-
-  &__header {
-    background: rgba(30, 27, 44, 0.6); // Более темный фон для заголовка
-    border-bottom: 1px solid rgba(177, 149, 246, 0.25); // Более заметная граница
-  }
-}
-
-.input-field {
-  background: var(--input-bg);
-  border: 1px solid rgba(177, 149, 246, 0.2);
+.btn-submit {
+  background-color: var(--accent-primary);
+  color: white;
 
   &:hover {
-    border-color: var(--accent-purple);
-    background: rgba(30, 27, 44, 0.9);
-  }
-
-  &:focus {
-    border-color: var(--accent-purple);
-    box-shadow: 0 0 0 2px rgba(177, 149, 246, 0.25);
-    background: rgba(30, 27, 44, 1);
+    background-color: var(--accent-hover);
   }
 }
 
-.tag {
-  background: rgba(177, 149, 246, 0.15);
-  border: 1px solid rgba(177, 149, 246, 0.3);
+.btn-cancel {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 
   &:hover {
-    background: rgba(177, 149, 246, 0.25);
+    background-color: var(--hover-bg);
   }
 }
 
-.button {
-  &--primary {
-    background: var(--accent-purple);
-    box-shadow: 0 2px 8px rgba(177, 149, 246, 0.3);
+@media (max-width: 640px) {
+  .task-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
 
-    &:hover:not(:disabled) {
-      background: var(--accent-purple-hover);
-      box-shadow: 0 2px 12px rgba(177, 149, 246, 0.4);
+  .form-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
     }
   }
-
-  &--secondary {
-    background: rgba(177, 149, 246, 0.1);
-    border: 1px solid rgba(177, 149, 246, 0.25);
-
-    &:hover:not(:disabled) {
-      background: rgba(177, 149, 246, 0.2);
-      border-color: rgba(177, 149, 246, 0.35);
-    }
-  }
-}
-
-// Обновляем стиль фона модального окна для лучшего контраста
-.modal-overlay {
-  background: rgba(16, 14, 23, 0.8); // Более темный фон
-  backdrop-filter: blur(8px);
-}
-
-// Обновленный стиль для datetime-local
-input[type="datetime-local"] {
-  background: var(--input-bg);
-
-  &::-webkit-calendar-picker-indicator {
-    filter: invert(0.8) sepia(1) saturate(1) hue-rotate(220deg); // Фиолетовый индикатор
-    opacity: 0.7;
-  }
-}
-
-// Обновленный стиль для разделителей
-.form-actions {
-  border-top: 1px solid rgba(177, 149, 246, 0.2);
 }

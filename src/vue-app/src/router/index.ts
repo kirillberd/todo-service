@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "../store/userStore";
 import Login from "../components/Login.vue";
 import Register from "../components/Register.vue";
+import TaskForm from '../components/TaskForm.vue'
 const routes = [
   {
 
@@ -14,6 +15,12 @@ const routes = [
     name: "register",
     component: Register,
   },
+  {
+    path: '/',
+    name: 'task-from',
+    component: TaskForm,
+    meta: { requiresAuth: true } // добавляем мета-поле для проверки аутентификации
+  }
 
 ];
 

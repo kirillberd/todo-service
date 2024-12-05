@@ -45,7 +45,7 @@
           userStore.setUser(userData);
           router.push("/")
         } catch (err: any) {
-          error.message = err.response.data.detail;
+          console.log(err)
         }
       };
   
