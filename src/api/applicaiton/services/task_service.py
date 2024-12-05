@@ -17,3 +17,8 @@ class TaskService:
         except Exception as e:
             module_logger.info(f"Error adding task: {e}")
     
+    def get_tasks_by_user_id(self, id: str):
+        try:
+            return self.task_repository.get_by_user_id(id)
+        except Exception as e:
+            module_logger.info("Error getting user tasks")

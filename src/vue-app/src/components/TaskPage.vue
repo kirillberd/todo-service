@@ -1,4 +1,3 @@
-<!-- views/TaskPage.vue -->
 <template>
     <div class="task-page">
       <div class="task-page__header">

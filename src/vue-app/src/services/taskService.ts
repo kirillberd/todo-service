@@ -39,7 +39,7 @@ class TaskService {
   async getTasks(): Promise<TaskResponse[]> {
     try {
       const response: AxiosResponse<TaskResponse[]> = await apiClient.get(
-        this.BASE_PATH
+        this.BASE_PATH + "/all"
       );
       return response.data;
     } catch (error: any) {
