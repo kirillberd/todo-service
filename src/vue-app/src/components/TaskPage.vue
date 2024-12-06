@@ -35,8 +35,6 @@
     <TaskList
       v-else
       :tasks="filteredTasks"
-      @edit="handleEdit"
-      @delete="handleDelete"
       @view="handleViewTask"
     />
  

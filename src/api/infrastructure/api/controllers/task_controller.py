@@ -31,7 +31,12 @@ def get_tasks(task_service: TaskService = Depends(Provide[Container.task_service
 
 @router.delete("/{task_id}")
 @inject
-def delete_task_by_id(task_id,task_service: TaskService = Depends(Provide[Container.task_service]), user_dat: dict = Depends(verify_token)):
+def delete_task_by_id(task_id,task_service: TaskService = Depends(Provide[Container.task_service]), user_data: dict = Depends(verify_token)):
     module_logger.info(task_id)
     task_service.delete_task_by_id(task_id)
     return "Task deleted successfully"
+
+@router.put("/{task_id}")
+@inject
+def update_task_by_id(task_id, task: Task, task_service: TaskService = Depends(Provide[Container.task_service]), user_data: dict = Depends(verify_token)):
+    task_service.update_task_by_id(task, task_id)

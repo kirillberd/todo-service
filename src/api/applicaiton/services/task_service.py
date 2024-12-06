@@ -26,3 +26,8 @@ class TaskService:
             self.task_repository.delete_by_id(id)
         except Exception as e:
             module_logger.error(f"Error deliting task {e}")
+    def update_task_by_id(self, task: Task, id):
+        try:
+            self.task_repository.update_by_id(task, id)
+        except Exception as e:
+            module_logger.error(f"Error updating task {e}")

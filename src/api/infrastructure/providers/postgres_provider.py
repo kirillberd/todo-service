@@ -20,7 +20,7 @@ class PostgresContextProvider:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self._session:
             if exc_type:
-                module_logger.error(exc_type)
+                module_logger.error(exc_val)
                 self._session.rollback()
             else:
                 self._session.commit()
