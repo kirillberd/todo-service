@@ -25,9 +25,8 @@
             placeholder="Добавьте теги"
             @keydown.enter.prevent="addTag"
           />
-          <button type="button" class="add-tag-btn" @click="addTag">+</button>
         </div>
-        <div class="tags-container" v-if="taskData.tags.length">
+        <div class="tags-container" v-if="taskData.tags?.length">
           <span v-for="(tag, index) in taskData.tags" :key="index" class="tag">
             {{ tag }}
             <button type="button" class="remove-tag" @click="removeTag(index)">×</button>
@@ -73,60 +72,77 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import { useUserStore } from '../store/userStore';
 import { taskService, type TaskDTO } from '../services/taskService';
 
 export default defineComponent({
-  name: 'TaskForm',
-  setup() {
-    const userStore = useUserStore();
-    const tagInput = ref('');
-    const error = ref('');
+ name: 'TaskForm',
+ setup() {
+   const userStore = useUserStore();
+   const tagInput = ref('');
+   const error = ref('');
 
-    const taskData = reactive<TaskDTO>({
-      name: '',
-      tags: [],
-      state: 'new',
-      comments: '',
-      deadline: null,
-      user_id: userStore.user?.id || ''
-    });
+   const taskData = reactive<TaskDTO>({
+     name: '',
+     tags: [],
+     state: 'new',
+     comments: '',
+     deadline: null,
+     user_id: userStore.user?.id || ''
+   });
 
-    const addTag = () => {
-      if (tagInput.value.trim()) {
-        if (!taskData.tags) {
-          taskData.tags = [];
-        }
-        taskData.tags.push(tagInput.value.trim());
-        tagInput.value = '';
-      }
-    };
+   watch(tagInput, (newValue) => {
+     if (newValue.includes(' ')) {
+       const newTags = [...new Set(
+         newValue.split(' ')
+           .map(tag => tag.trim())
+           .filter(tag => tag && !taskData.tags?.includes(tag))
+       )];
+       
+       if (newTags.length) {
+         if (!taskData.tags) {
+           taskData.tags = [];
+         }
+         taskData.tags.push(...newTags);
+       }
+       tagInput.value = '';
+     }
+   });
 
-    const removeTag = (index: number) => {
-      if (taskData.tags) {
-        taskData.tags.splice(index, 1);
-      }
-    };
+   const addTag = () => {
+     if (tagInput.value.trim() && !taskData.tags?.includes(tagInput.value.trim())) {
+       if (!taskData.tags) {
+         taskData.tags = [];
+       }
+       taskData.tags.push(tagInput.value.trim());
+       tagInput.value = '';
+     }
+   };
 
-    const handleSubmit = async () => {
-      try {
-        await taskService.createTask(taskData);
-      } catch (err: any) {
-        error.value = err.message;
-      }
-    };
+   const removeTag = (index: number) => {
+     if (taskData.tags) {
+       taskData.tags.splice(index, 1);
+     }
+   };
 
-    return {
-      taskData,
-      tagInput,
-      error,
-      addTag,
-      removeTag,
-      handleSubmit
-    };
-  }
+   const handleSubmit = async () => {
+     try {
+       await taskService.createTask(taskData);
+     } catch (err: any) {
+       error.value = err.message;
+     }
+   };
+
+   return {
+     taskData,
+     tagInput,
+     error,
+     addTag,
+     removeTag,
+     handleSubmit
+   };
+ }
 });
 </script>
-
 <style lang="scss" src="src/assets/components/task-form.scss"></style>

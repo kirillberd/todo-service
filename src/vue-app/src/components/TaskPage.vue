@@ -69,7 +69,7 @@
     const loading = ref(true);
     const error = ref('');
     const showCreateModal = ref(false);
-    const currentView = ref('all');
+    const currentView = ref<string>('all');
  
     const tabs: Tab[] = [
       { value: 'today', label: 'Задачи на сегодня' },
