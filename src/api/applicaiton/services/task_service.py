@@ -21,4 +21,10 @@ class TaskService:
         try:
             return self.task_repository.get_by_user_id(id)
         except Exception as e:
-            module_logger.info("Error getting user tasks")
+            module_logger.info(f"Error getting user tasks {e}")
+    
+    def delete_task_by_id(self, id):
+        try:
+            self.task_repository.delete_by_id(id)
+        except Exception as e:
+            module_logger.error(f"Error deliting task {e}")

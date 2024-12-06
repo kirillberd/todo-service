@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from infrastructure.providers.postgres_provider import PostgresContextProvider
 from sqlalchemy import Engine
-from sqlmodel import select
+from sqlmodel import select,delete
 from domain.task import Task
 import logging
 
@@ -29,4 +29,11 @@ class TaskRepository:
                 module_logger.info(result)
                 return result
 
-
+    def delete_by_id(self, id: str):
+        with PostgresContextProvider(self.engine) as session:
+            if session is None:
+                raise Exception("Could not connect to a db")
+            else:
+                statement = delete(Task).where(Task.id == id)
+                session.exec(statement)
+                

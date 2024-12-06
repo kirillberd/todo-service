@@ -76,7 +76,7 @@ class TaskService {
     } catch (error: any) {
       throw new Error(error.response?.data?.detail || 'Ошибка при удалении задачи');
     }
-  }
+  } 
 }
 
 export const taskService = new TaskService();
