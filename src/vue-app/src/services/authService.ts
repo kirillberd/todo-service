@@ -16,6 +16,7 @@ class AuthService {
     localStorage.setItem("access_token", token);
     localStorage.setItem("refresh_token", refresh_token)
     const userData = response.data.user;
+    console.log(userData)
     const user: UserDTO = {
       ...userData,
       token: token,

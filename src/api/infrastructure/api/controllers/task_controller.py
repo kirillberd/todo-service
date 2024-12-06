@@ -23,7 +23,8 @@ def add_task(task: Task, task_service: TaskService = Depends(Provide[Container.t
 @router.get("/all")
 @inject
 def get_tasks(task_service: TaskService = Depends(Provide[Container.task_service]), user_data: dict = Depends(verify_token)):
-    result = task_service.get_tasks_by_user_id(user_data["sid"])
+    module_logger.info(user_data["sub"])
+    result = task_service.get_tasks_by_user_id(user_data["sub"])
     module_logger.info(result)
     return result
 

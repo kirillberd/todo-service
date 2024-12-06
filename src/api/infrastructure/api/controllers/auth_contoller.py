@@ -62,7 +62,7 @@ def login_for_access_token(
             "user": {
                 "username": user_info.get("preferred_username"),
                 "email": user_info.get("email"),
-                "id": user_info.get("sid")
+                "id": user_info.get("sub")
             }
 
             })
