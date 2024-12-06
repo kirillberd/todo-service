@@ -25,6 +25,7 @@
             placeholder="Добавьте теги"
             @keydown.enter.prevent="addTag"
           />
+          <button type="button" class="add-tag-btn" @click="addTag">+</button>
         </div>
         <div class="tags-container" v-if="taskData.tags?.length">
           <span v-for="(tag, index) in taskData.tags" :key="index" class="tag">
@@ -78,7 +79,8 @@ import { taskService, type TaskDTO } from '../services/taskService';
 
 export default defineComponent({
  name: 'TaskForm',
- setup() {
+ emits: ["submit", "cancel"],
+ setup(_, {emit}) {
    const userStore = useUserStore();
    const tagInput = ref('');
    const error = ref('');
@@ -129,6 +131,7 @@ export default defineComponent({
    const handleSubmit = async () => {
      try {
        await taskService.createTask(taskData);
+        emit("submit")
      } catch (err: any) {
        error.value = err.message;
      }

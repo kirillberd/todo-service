@@ -6,7 +6,7 @@ interface TaskDTO {
   tags?: string[];
   comments?: string;
   state: string;
-  deadline?: Date | null;
+  deadline?: Date | null | string;
   user_id: string;
 }
 

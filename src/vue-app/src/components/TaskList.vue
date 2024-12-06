@@ -20,8 +20,7 @@
           v-for="task in filteredTasks"
           :key="task.id"
           :task="task"
-          @edit="$emit('edit', $event)"
-          @delete="$emit('delete', $event)"
+          @view="$emit('view', $event)"
         />
       </div>
   
@@ -47,7 +46,7 @@
         required: true
       }
     },
-    emits: ['edit', 'delete'],
+    emits: ['edit', 'delete', 'view'],
     setup(props) {
       const searchQuery = ref('');
       const stateFilter = ref('');

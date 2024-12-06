@@ -37,6 +37,7 @@
       :tasks="filteredTasks"
       @edit="handleEdit"
       @delete="handleDelete"
+      @view="handleViewTask"
     />
  
     <div v-if="showCreateModal" class="modal-overlay" @click="handleModalClose">
@@ -47,6 +48,16 @@
         />
       </div>
     </div>
+    <div v-if="selectedTask" class="modal-overlay" @click="selectedTask = null">
+   <div class="modal-content" @click.stop>
+     <TaskEditForm
+       :task="selectedTask"
+       @submit="handleTaskEdit"
+       @delete="handleDelete"
+       @cancel="selectedTask = null"
+     />
+   </div>
+ </div>
   </div>
  </template>
  
@@ -55,6 +66,7 @@
  import { taskService, TaskResponse } from '../services/taskService';
  import TaskList from '../components/TaskList.vue';
  import TaskForm from '../components/TaskForm.vue';
+import TaskEditForm from './TaskEditForm.vue';
  
  interface Tab {
   value: string;
@@ -63,20 +75,23 @@
  
  export default defineComponent({
   name: 'TaskPage',
-  components: { TaskList, TaskForm },
+  components: { TaskList, TaskForm, TaskEditForm },
   setup() {
     const tasks = ref<TaskResponse[]>([]);
     const loading = ref(true);
     const error = ref('');
     const showCreateModal = ref(false);
     const currentView = ref<string>('all');
+    const selectedTask = ref<TaskResponse | null>(null);
  
     const tabs: Tab[] = [
       { value: 'today', label: 'Задачи на сегодня' },
       { value: 'tomorrow', label: 'Задачи на завтра' },
       { value: 'past', label: 'Прошлые задачи' }
     ];
- 
+    const handleViewTask = (task: TaskResponse) => {
+     selectedTask.value = task;
+   };
     const getEmptyMessage = () => {
       const messages = {
         all: 'Задач нет',
@@ -132,25 +147,31 @@
     };
  
     const handleDelete = async (taskId: number) => {
-      if (confirm('Вы уверены, что хотите удалить задачу?')) {
         try {
-          await taskService.deleteTask(taskId);
           await loadTasks();
+          selectedTask.value = null;
         } catch (err: any) {
           error.value = err.message;
         }
-      }
+
     };
  
-    const handleTaskCreate = async (taskData: any) => {
+    const handleTaskCreate = async () => {
       try {
-        await taskService.createTask(taskData);
         showCreateModal.value = false;
         await loadTasks();
       } catch (err: any) {
         error.value = err.message;
       }
     };
+    const handleTaskEdit = async () => {
+     try {
+       selectedTask.value = null;
+       await loadTasks();
+     } catch (err: any) {
+       error.value = err.message;
+     }
+   };
  
     const handleModalClose = (e: MouseEvent) => {
       if (e.target === e.currentTarget) {
@@ -172,7 +193,10 @@
       handleDelete,
       handleTaskCreate,
       handleModalClose,
-      getEmptyMessage
+      getEmptyMessage,
+      selectedTask,
+      handleViewTask,
+      handleTaskEdit,
     };
   }
  });

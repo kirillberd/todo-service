@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, Column, Integer, String
+from sqlmodel import Field, SQLModel, Column, String
 from sqlalchemy.dialects import postgresql
 from typing import Optional, List
 from datetime import datetime

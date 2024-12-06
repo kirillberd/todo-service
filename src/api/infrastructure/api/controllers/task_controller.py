@@ -14,8 +14,8 @@ router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 @router.post("/add")
 @inject
-def add_task(task: Task, task_service: TaskService = Depends(Provide[Container.task_service]), user_data: dict = Depends(verify_token) ):
-    module_logger.info(task)
+def add_task(task: Task, task_service: TaskService = Depends(Provide[Container.task_service]), user_data: dict = Depends(verify_token)):
+    module_logger.info(f"User id: {task.user_id}")
     task_service.process_task(task)
     return "Task recieved"
 

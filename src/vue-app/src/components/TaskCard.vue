@@ -1,5 +1,5 @@
 <template>
-    <div class="task-card">
+    <div class="task-card" @click="$emit('view', task)">
       <div class="task-card__header">
         <h3 class="task-card__title">{{ task.name }}</h3>
         <span :class="['task-card__state', `task-card__state--${task.state}`]">
@@ -26,14 +26,6 @@
         </p>
       </div>
   
-      <div class="task-card__actions">
-        <button class="btn-edit" @click="$emit('edit', task)">
-          Редактировать
-        </button>
-        <button class="btn-delete" @click="$emit('delete', task.id)">
-          Удалить
-        </button>
-      </div>
     </div>
   </template>
   
@@ -49,7 +41,7 @@
         required: true
       }
     },
-    emits: ['edit', 'delete'],
+    emits: ['edit', 'delete', 'view'],
     setup() {
       const getStateLabel = (state: string): string => {
         const states: Record<string, string> = {
