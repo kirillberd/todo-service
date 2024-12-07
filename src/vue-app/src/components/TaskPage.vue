@@ -7,22 +7,17 @@
       </button>
     </div>
 
-   <div class="view-toggle">
-     <button 
-       class="view-btn"
-       :class="{ active: viewMode === 'list' }"
-       @click="viewMode = 'list'"
-     >
-       Список
-     </button>
-     <button 
-       class="view-btn"
-       :class="{ active: viewMode === 'calendar' }"
-       @click="viewMode = 'calendar'"
-     >
-       Календарь
-     </button>
-   </div>
+    <div class="view-toggle">
+    <button 
+      v-for="view in viewModes"
+      :key="view.value"
+      class="view-btn"
+      :class="{ active: viewMode === view.value }"
+      @click="viewMode = view.value"
+    >
+      {{ view.label }}
+    </button>
+  </div>
  
     <div class="task-navigation" v-if="viewMode === 'list'">
      <button 
@@ -32,7 +27,7 @@
      >
        Все задачи
      </button>
-     <button 
+     <button
        v-for="tab in tabs" 
        :key="tab.value"
        class="nav-btn"
@@ -43,32 +38,36 @@
      </button>
    </div>
 
-   <div v-if="loading" class="task-page__loading">Загрузка...</div>
-   <div v-else-if="error" class="task-page__error">{{ error }}</div>
-   <div v-else-if="!filteredTasks.length" class="task-page__empty">
-     {{ getEmptyMessage() }}
-   </div>
 
-   <template v-else>
-     <TaskList
-       v-if="viewMode === 'list'"
-       :tasks="filteredTasks"
-       @edit="handleEdit"
-       @delete="handleDelete"
-       @view="handleViewTask"
-     />
-     <TaskCalendar
-       v-else
-       :tasks="tasks"
-       @view="handleViewTask"
-     />
-   </template>
+
+  <div v-if="loading" class="task-page__loading">Загрузка...</div>
+  <div v-else-if="error" class="task-page__error">{{ error }}</div>
+  <div v-else-if="viewMode === 'list' && !filteredTasks.length" class="task-page__empty">
+    {{ getEmptyMessage() }}
+  </div>
+
+  <template v-else>
+    <TaskList
+      v-if="viewMode === 'list'"
+      :tasks="filteredTasks"
+      @edit="handleEdit"
+      @delete="handleDelete"
+      @view="handleViewTask"
+    />
+    <TaskCalendar
+      v-else-if="viewMode === 'calendar'"
+      :tasks="tasks"
+      @view="handleViewTask"
+    />
+    <KanbanBoard
+      v-else
+      :tasks="tasks"
+      @edit="handleEdit"
+      @delete="handleDelete"
+      @view="handleViewTask"
+    />
+  </template>
  
-    <div v-if="loading" class="task-page__loading">Загрузка...</div>
-    <div v-else-if="error" class="task-page__error">{{ error }}</div>
-    <div v-else-if="!filteredTasks.length" class="task-page__empty">
-      {{ getEmptyMessage() }}
-    </div>
  
     <div v-if="showCreateModal" class="modal-overlay" @click="handleModalClose">
       <div class="modal-content" @click.stop>
@@ -98,6 +97,7 @@
  import TaskForm from '../components/TaskForm.vue';
 import TaskEditForm from './TaskEditForm.vue';
 import TaskCalendar from './TaskCalendar.vue';
+import KanbanBoard from './KanbanBoard.vue';
  
  interface Tab {
   value: string;
@@ -106,7 +106,7 @@ import TaskCalendar from './TaskCalendar.vue';
  
  export default defineComponent({
   name: 'TaskPage',
-  components: { TaskList, TaskForm, TaskEditForm , TaskCalendar},
+  components: { TaskList, TaskForm, TaskEditForm , TaskCalendar, KanbanBoard},
   setup() {
     const tasks = ref<TaskResponse[]>([]);
     const loading = ref(true);
@@ -114,7 +114,12 @@ import TaskCalendar from './TaskCalendar.vue';
     const showCreateModal = ref(false);
     const currentView = ref<string>('all');
     const selectedTask = ref<TaskResponse | null>(null);
-    const viewMode = ref<'list' | 'calendar'>('list');
+    const viewMode = ref<'list' | 'calendar' | 'kanban'>('list');
+    const viewModes = [
+      { value: 'list', label: 'Список' },
+      { value: 'calendar', label: 'Календарь' },
+      { value: 'kanban', label: 'Kanban' }
+    ];
  
     const tabs: Tab[] = [
       { value: 'today', label: 'Задачи на сегодня' },
@@ -230,6 +235,7 @@ import TaskCalendar from './TaskCalendar.vue';
       handleViewTask,
       handleTaskEdit,
       viewMode,
+      viewModes,
     };
   }
  });

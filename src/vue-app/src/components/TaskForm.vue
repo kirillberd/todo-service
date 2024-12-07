@@ -25,7 +25,6 @@
             placeholder="Добавьте теги"
             @keydown.enter.prevent="addTag"
           />
-          <button type="button" class="add-tag-btn" @click="addTag">+</button>
         </div>
         <div class="tags-container" v-if="taskData.tags?.length">
           <span v-for="(tag, index) in taskData.tags" :key="index" class="tag">
