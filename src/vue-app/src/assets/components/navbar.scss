@@ -151,3 +151,18 @@
     text-align: center;
   }
  }
+
+ .navbar-brand {
+  margin-right: auto; 
+}
+
+.navbar-logo {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

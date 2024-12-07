@@ -1,6 +1,9 @@
 <template>
     <nav class="navbar">
       <div class="navbar-content">
+        <div class="navbar-brand">
+        <img src="/public/logo.svg" alt="Logo" class="navbar-logo">
+      </div>
         <div v-if="userStore.isAuthenticated" class="navbar-authenticated">
           <span class="username">{{ userStore.user?.username }}</span>
           <button class="logout-btn" @click="logout">Выйти</button>
